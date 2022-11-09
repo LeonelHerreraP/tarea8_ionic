@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'vivencia/:titulo',
+    loadChildren: () => import('./vivencia/vivencia.module').then( m => m.VivenciaPageModule)
+  },
 ];
 
 @NgModule({

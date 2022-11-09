@@ -12,11 +12,11 @@ import { Storage } from '@ionic/storage-angular';
 })
 export class HomePage implements OnInit {
   constructor(private storage: Storage, public photoService: PhotoService) { }
-  
+
   async ngOnInit() {
     this.loadFiles();
     VoiceRecorder.requestAudioRecordingPermission();
-  
+
     await this.storage.create();
 
     this.cargarVivencias();
@@ -24,35 +24,46 @@ export class HomePage implements OnInit {
 
   recording = false;
   storedFileNames = [];
-  
+
   // inputs modal
   public titulo: string = "";
   public descripcion: string = "";
   public fecha: string = "";
   vivencias = [];
-  
+
   // Storage
-  async cargarVivencias(){
+  async cargarVivencias() {
     this.vivencias = [];
     this.storage.forEach((key, value, index) => {
       this.vivencias.unshift(key);
     });
   }
 
-  async addVivencia(){
-    this.fecha = "" + new Date().getDate()+ "-" + new Date().getMonth() + "-" + new Date().getFullYear();
+  async addVivencia() {
+    await this.loadFiles();
+    this.fecha = "" + new Date().getDate() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getFullYear();
+    if (this.storedFileNames[this.storedFileNames.length - 1]) {
+      const fotoFile = this.storedFileNames[this.storedFileNames.length - 1];
+      const fotoPath = fotoFile.uri;
 
+      await this.storage.set(this.titulo, {
+        'titulo': this.titulo,
+        'descripcion': this.descripcion,
+        'fecha': this.fecha,
+        'foto': fotoPath
+      });
+      this.cargarVivencias();
+      this.setOpen(false);
 
-    await this.storage.set(this.titulo, {
-      'titulo': this.titulo,
-      'descripcion': this.descripcion,
-      'fecha': this.fecha
-    });
+      this.titulo = "";
+      this.descripcion = "";
+    }
+
+  }
+
+  async borrarVivencias() {
+    await this.storage.clear();
     this.cargarVivencias();
-    this.setOpen(false);
-
-    this.titulo = "";
-    this.descripcion = "";
   }
 
   // CUESTION MODAL

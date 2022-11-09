@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Vivencia</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <h6 class="ion-text-end">{{vivencia.fecha}}</h6>
+  <h2>{{vivencia.titulo}}</h2>
+  <p class="ion-text-justify">{{vivencia.descripcion}}</p>
+  <img src="{{vivencia.foto}}" alt="{{vivencia.foto}}">
+
+</ion-content>
